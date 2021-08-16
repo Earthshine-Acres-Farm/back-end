@@ -1,19 +1,35 @@
 const db= require('../../data/dbConfig')
 
-const getUserById = async (userId)=> {
-    await db("users").select('*').where('users.id',userId)
+function getUserById (userId) {
+    return db("users").where('users.id',userId).select('*')
 }
 
-const getUserOrders = async (userId)=>{
-    await db ("orders").select('*').where('orders.buyerId',userId)
+// function addOrder(order) {
+//     return db("orders").insert(order).returning('id');
+// }; 
+
+function getUserOrders (userId) {
+    return db ("orders as O")
+    .join('products as P','O.productId','P.id')
+    .select('P.productName','O.price','O.quantity')
+    .where('O.buyerId',userId)
 }
 
-const deleteAccount = (id) => {
+function deleteAccount (id) {
     return db('users').where({ id }).del();
   };
 
+  async function updateUserData(id, data) {
+	await db("users").where({ id }).update(data)
+	return getUserById(id)
+}
+
+
+
 module.exports={
     getUserById,
+    // addOrder,
     getUserOrders,
-    deleteAccount
+    deleteAccount,
+    updateUserData
 };

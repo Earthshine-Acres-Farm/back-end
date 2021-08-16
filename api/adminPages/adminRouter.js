@@ -29,9 +29,9 @@ router.get("/animals/:id", async (req, res, next) => {
 
 router.post("/animals", async (req, res, next) => {
 	try {
-        const {item, category,description}=req.body
-		const animal = await Admin.addAnimal({item, category,description})
-		res.status(201).json(animal)
+        const {animal, description}=req.body
+		const animalItems = await Admin.addAnimal({animal, description})
+		res.status(201).json(animalItems)
 	} catch (err) {
 		next(err)
 	}
@@ -81,9 +81,9 @@ router.get("/peppers/:id", async (req, res, next) => {
 
 router.post("/peppers", async (req, res, next) => {
 	try {
-        const {item, category,description}=req.body
-		const pepper = await Admin.addGroundPepper({item, category,description})
-		res.status(201).json(pepper)
+        const {groundPepper, description}=req.body
+		const pepperItems = await Admin.addGroundPepper({groundPepper, description})
+		res.status(201).json(pepperItems)
 	} catch (err) {
 		next(err)
 	}
@@ -133,9 +133,9 @@ router.get("/sauces/:id", async (req, res, next) => {
 
 router.post("/sauces", async (req, res, next) => {
 	try {
-        const {item, category,description}=req.body
-		const sauce = await Admin.addHotSauce({item, category,description})
-		res.status(201).json(sauce)
+        const {sauce, description}=req.body
+		const sauceItems = await Admin.addHotSauce({sauce, description})
+		res.status(201).json(sauceItems)
 	} catch (err) {
 		next(err)
 	}
@@ -158,49 +158,49 @@ router.delete('/sauces/:id', async (req,res,next)=>{
     }catch(err){next(err)}
 })
 
-router.get("/orders", async (req, res, next) => {
-	try {
-        // console.log(await Admin.getOrders())
-		res.json(await Admin.getOrders())
-	} catch(err) {
-		next(err)
-	}
-})
+// router.get("/orders", async (req, res, next) => {
+// 	try {
+//         // console.log(await Admin.getOrders())
+// 		res.json(await Admin.getOrders())
+// 	} catch(err) {
+// 		next(err)
+// 	}
+// })
 
-router.get("/orders/:id", async (req, res, next) => {
-	try {
-        // console.log(await Admin.getorderById(req.params.id))
-		const order = await Admin.getOrderById(req.params.id)
-		if (!order) {
-			return res.status(404).json({
-				message: "order not found",
-			})
-		}
+// router.get("/orders/:id", async (req, res, next) => {
+// 	try {
+//         // console.log(await Admin.getorderById(req.params.id))
+// 		const order = await Admin.getOrderById(req.params.id)
+// 		if (!order) {
+// 			return res.status(404).json({
+// 				message: "order not found",
+// 			})
+// 		}
 
-		res.json(order)
-	} catch (err) {
-		next(err)
-	}
-})
+// 		res.json(order)
+// 	} catch (err) {
+// 		next(err)
+// 	}
+// })
 
 // router.post("/orders", async (req, res, next) => {
 // 	try {
-//         const {item, category,description}=req.body
-// 		const order = await Admin.addOrder({item, category,description})
+//         const {,description}=req.body
+// 		const order = await Admin.addOrder({,description})
 // 		res.status(201).json(order)
 // 	} catch (err) {
 // 		next(err)
 // 	}
 // })
 
-// router.put('/orders/:id', async (req,res,next)=>{
-//     try{
-//         const editOrder=await Admin.updateOrder(req.params.id,req.body)
-//         res.json(editOrder)
-//     }catch(err){
-//         next(err)
-//     }
-// })
+router.put('/orders/:id', async (req,res,next)=>{
+    try{
+        const editOrder=await Admin.updateOrder(req.params.id,req.body)
+        res.json(editOrder)
+    }catch(err){
+        next(err)
+    }
+})
 
 // router.delete('/orders/:id', async (req,res,next)=>{
 //     try{    
@@ -236,9 +236,9 @@ router.get("/produce/:id", async (req, res, next) => {
 
 router.post("/produce", async (req, res, next) => {
 	try {
-        const {item, category,description}=req.body
-		const produce = await Admin.addProduce({item, category,description})
-		res.status(201).json(produce)
+        const {produce, description}=req.body
+		const produceItems = await Admin.addProduce({produce, description})
+		res.status(201).json(produceItems)
 	} catch (err) {
 		next(err)
 	}
@@ -288,8 +288,8 @@ router.get("/products/:id", async (req, res, next) => {
 
 router.post("/products", async (req, res, next) => {
 	try {
-        const {item, category,description}=req.body
-		const product = await Admin.addProduct({item, category,description})
+        const {productName,price,amount, productType, description}=req.body
+		const product = await Admin.addProduct({productName,price,amount, productType, description})
 		res.status(201).json(product)
 	} catch (err) {
 		next(err)
@@ -315,7 +315,7 @@ router.delete('/products/:id', async (req,res,next)=>{
 
 router.get("/soaps", async (req, res, next) => {
 	try {
-        console.log(await Admin.getSoap())
+        // console.log(await Admin.getSoap())
 		res.json(await Admin.getSoap())
 	} catch(err) {
 		next(err)
@@ -340,9 +340,9 @@ router.get("/soaps/:id", async (req, res, next) => {
 
 router.post("/soaps", async (req, res, next) => {
 	try {
-        const {item, category,description}=req.body
-		const soap = await Admin.addSoap({item, category,description})
-		res.status(201).json(soap)
+        const {soap, description}=req.body
+		const soapItems = await Admin.addSoap({soap, description})
+		res.status(201).json(soapItems)
 	} catch (err) {
 		next(err)
 	}
@@ -364,4 +364,59 @@ router.delete('/soaps/:id', async (req,res,next)=>{
             res.status(200).json({message: "soap has been removed from inventory."})
     }catch(err){next(err)}
 })
+
+router.get("/orderStatus/:shipped", async (req, res, next) => {
+	try {
+        const status=await Admin.getOrderStatus(req.params.shipped)
+        if (!status) {
+			return res.status(404).json({
+				message: "no orders of this status",
+			})
+		}
+        console.log(status)
+		res.json(status)
+	} catch(err) {
+		next(err)
+	}
+})
+
+router.get('/orders/:orderId', async (req,res,next)=>{
+    try{
+        const data= await Admin.getCustomerOrder(req.params.orderId)
+        let prices=[]
+        let i=JSON.parse(data.products)
+        i.map((p)=>{
+            prices.push(p.price*p.quantity)
+            
+        })
+        let tot=prices.reduce((a, b) => a + b, 0)
+        if (!data) {
+            return res.status(404).json({
+                message: "order not found"
+            })
+        }
+
+        res.json({
+            id: data.id, 
+            firstName: data.firstName, 
+            lastName: data.lastName, 
+            address: data.address,
+            products: JSON.parse(data.products),  
+            orderTotal: tot, 
+            createdAt: data.createdAt, 
+            updatedAt: data.updatedAt, 
+            shipped: data.shipped})
+    }catch(err){next(err)}
+
+})
+
+
+
+// router.get("/orders/shipped", async (req, res, next) => {
+// 	try {
+// 		res.json(await Admin.getShippedOrders())
+// 	} catch(err) {
+// 		next(err)
+// 	}
+// })
 module.exports = router
