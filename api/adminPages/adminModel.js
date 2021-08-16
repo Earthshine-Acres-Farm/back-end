@@ -56,7 +56,7 @@ function getHotSauce() {
 
 function getHotSauceById (id){
     return db("hotSauce")
-        .select('hotSauce','description')
+        .select('sauce','description')
         .where({id})
         .first()
 }
@@ -74,29 +74,29 @@ function removeHotSauce(id) {
     return db("hotSauce").where({ id }).del();
 };
 
-function getOrders() {
-    return db("orders").select('*')
-};
+// function getOrders() {
+//     return db("orders").select('*')
+// };
 
-function getOrderById (id){
-    return db("orders")
-        .select('orderId','productId','buyerId','price','quantity')
-        .where('orderId',id)
-        .first()
-}
+// function getOrderById (id){
+//     return db("orders")
+//         .select('orderId','productId','buyerId','price','quantity')
+//         .where('orderId',id)
+//         .first()
+// }
 
-function addOrder(order) {
-    return db("orders").insert(order).returning('id');
-};
+// function addOrder(order) {
+//     return db("orders").insert(order).returning('id');
+// };
 
 //changes would be an object containing the name and description of the item in the table
 function updateOrder(id, changes) {
     return db("orders").where({ id }).update(changes);
 };
 
-function removeOrder(id) {
-    return db("orders").where({ id }).del();
-};
+// function removeOrder(id) {
+//     return db("orders").where({ id }).del();
+// };
 
 function getProduce() {
     return db("produce").select('*')
@@ -151,6 +151,7 @@ function getSoap() {
 };
 
 function getSoapById (id){
+
     return db("soap")
         .select('Soap','description')
         .where({id})
@@ -170,6 +171,51 @@ function removeSoap(id) {
     return db("soap").where({ id }).del();
 };
 
+function getOrderStatus(status){
+    return db("orders").select('orders.id','orders.createdAt').where('orders.shipped',status)
+}
+
+// function getShippedOrders(){
+//     return db("orders").where('orders.shipped',true)
+// }
+
+const getCustomerOrder =async (id)=>{
+    let customerData = {
+        id: '',
+        firstName: '',
+        lastName: '',
+        address: '',
+        orderTotal: '',
+        createdAt: '',
+        updatedAt: '',
+        shipped: '',
+        products: [],
+    };
+    await db("orders as o")
+        .join('users as u','o.buyerId','u.id')
+        .select('o.id','u.firstName', 'u.lastName', 'u.address', 'o.orderTotal', 'o.createdAt',
+        'o.updatedAt',
+        'o.shipped',
+        'o.products')
+        .where('o.id',id)
+        .first()
+        .then((ord)=>{
+                customerData = {
+                    id: ord.id,
+                    firstName: ord.firstName,
+                    lastName: ord.lastName,
+                    address: ord.address,
+                    orderTotal: ord.orderTotal,
+                    createdAt: ord.createdAt,
+                    updatedAt: ord.updatedAt,
+                    shipped: ord.shipped,
+                    products: ord.products
+                }
+                console.log(customerData)
+        }
+        )
+    return customerData
+};
 module.exports={
     getAnimals,
     getAnimalById,
@@ -186,11 +232,11 @@ module.exports={
     addHotSauce,
     updateHotSauce,
     removeHotSauce,
-    getOrders,
-    getOrderById,
-    addOrder,
+    // getOrders,
+    // getOrderById,
+    // addOrder,
     updateOrder,
-    removeOrder,
+    // removeOrder,
     getProduce,
     getProduceById,
     addProduce,
@@ -206,5 +252,9 @@ module.exports={
     addSoap,
     updateSoap,
     removeSoap,
+    getOrderStatus,
+    getCustomerOrder,
+    
+    // getShippedOrders
     
 };

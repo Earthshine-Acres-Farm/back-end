@@ -1,28 +1,33 @@
 const db= require('../../data/dbConfig')
-
 function getAnimals() {
     return db("animals").select('*')
 }
-
-function getGroundPepper() {
-    return db("groundPepper").select('*')
+//gets all products by type
+function getSpecificProducts(products) {
+    return db("products").where('productType', products).select('*')
 }
+//gets all pepper products when link is clicked
+// function getGroundPepperProducts(pepper) {
+//     return db("products").where('productType', pepper).select('*')
+// }
 
-function getHotSauce() {
-    return db("hotSauce").select('*')
-}
+// function getHotSauceProducts(sauce) {
+//     return db("products").where('productType', sauce).select('*')
+// }
 
-function getProduce() {
-    return db("produce").select('*')
-}
+// function getProduceProducts(produce) {
+//     return db("products").where('productType',produce).select('*')
+// }
 
+//get all products
 function getProducts() {
     return db("products").select('*')
 }
 
-function getSoap() {
-    return db("soap").select('*')
-}
+// function getSoapProducts(soap) {
+//     return db("products").where('productType',soap).select('*')
+// }
+
 //provides token
 function getUser(email,password){
     return db("users").where('users.email',email).where('users.password',password)
@@ -32,8 +37,8 @@ function addUser(user){
     return db("users").insert(user).returning("id")
 }
 
-function forgotUserPassword(password,newpass){
-    return db("users").where({password}).update(newpass)
+function forgotUserPassword(id,newpass){
+    return db("users").where({id}).update(newpass)
 }
 
 
@@ -41,11 +46,12 @@ function forgotUserPassword(password,newpass){
 
 module.exports={
     getAnimals,
-    getGroundPepper,
-    getHotSauce,
-    getProduce,
+    getSpecificProducts,
+    // getGroundPepperProducts,
+    // getHotSauceProducts,
+    // getProduceProducts,
     getProducts,
-    getSoap,
+    // getSoapProducts,
     getUser,
     addUser,
     forgotUserPassword

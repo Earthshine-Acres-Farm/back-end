@@ -2,11 +2,14 @@
 exports.up = async function(knex) {
     await knex.schema
     .createTable('orders',(table)=>{
-        table.integer('orderId').notNullable()
-        table.integer('productId').notNullable().references('id').inTable('products')
+        table.increments('id')
+        table.json('products').notNullable()
         table.integer('buyerId').notNullable().references('id').inTable('users')
-        table.float('price').notNullable().references('price').inTable('products')
-        table.integer('quantity').notNullable()
+        table.float('orderTotal').defaultTo(0)
+        table.timestamp('createdAt').defaultTo(Date.now())
+        table.datetime('updatedAt').defaultTo(Date.now())
+        table.boolean('shipped').defaultTo(false)
+        
 
     })
 };
