@@ -78,20 +78,23 @@ function removeHotSauce(id) {
 //     return db("orders").select('*')
 // };
 
-// function getOrderById (id){
-//     return db("orders")
-//         .select('orderId','productId','buyerId','price','quantity')
-//         .where('orderId',id)
-//         .first()
-// }
+function getOrderById (id){
+    return db("orders")
+        .select('*')
+        .where('id',id)
+        .first()
+}
 
 // function addOrder(order) {
 //     return db("orders").insert(order).returning('id');
 // };
 
 //changes would be an object containing the name and description of the item in the table
-function updateOrder(id, changes) {
-    return db("orders").where({ id }).update(changes);
+async function updateOrder(id, changes) {
+    await db("orders")
+    .where({ id })
+    .update({updatedAt: Date.now(), shipped: changes.shipped})
+    return getOrderById(id);
 };
 
 // function removeOrder(id) {
@@ -211,11 +214,12 @@ const getCustomerOrder =async (id)=>{
                     shipped: ord.shipped,
                     products: ord.products
                 }
-                console.log(customerData)
+                // console.log(customerData)
         }
         )
     return customerData
 };
+
 module.exports={
     getAnimals,
     getAnimalById,
@@ -233,7 +237,7 @@ module.exports={
     updateHotSauce,
     removeHotSauce,
     // getOrders,
-    // getOrderById,
+    getOrderById,
     // addOrder,
     updateOrder,
     // removeOrder,

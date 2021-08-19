@@ -196,7 +196,8 @@ router.delete('/sauces/:id', async (req,res,next)=>{
 router.put('/orders/:id', async (req,res,next)=>{
     try{
         const editOrder=await Admin.updateOrder(req.params.id,req.body)
-        res.json(editOrder)
+        console.log(editOrder)
+        res.json('Customer order has been updated')
     }catch(err){
         next(err)
     }
