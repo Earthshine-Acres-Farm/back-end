@@ -8,11 +8,26 @@ function getUserById (userId) {
 //     return db("orders").insert(order).returning('id');
 // }; 
 
-function getUserOrders (userId) {
-    return db ("orders as O")
-    .join('products as P','O.productId','P.id')
-    .select('P.productName','O.price','O.quantity')
-    .where('O.buyerId',userId)
+const getUserOrders = async (userId) =>{
+    let orderData = {
+        id: '',
+        products: [],
+        orderTotal: ''
+    };
+    await db ("orders as o")
+    .select('o.id','o.products','o.orderTotal',)
+    .where('o.buyerId',userId)
+    .first()
+    .then((ord)=>{
+        orderData = {
+            id: ord.id,
+            products: ord.products,
+            orderTotal: ord.orderTotal
+        }
+        console.log(orderData)
+}
+)
+return orderData
 }
 
 function deleteAccount (id) {

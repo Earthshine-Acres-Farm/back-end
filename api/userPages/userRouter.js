@@ -30,12 +30,23 @@ router.get("/:id", async (req, res, next) => {
 router.get("/:id/orders", async (req, res, next) => {
 	try {
 		const orders = await Users.getUserOrders(req.params.id)
+        let prices=[]
+        let i=JSON.parse(orders.products)
+        i.map((p)=>{
+            prices.push(p.price*p.quantity)
+            
+        })
+        let tot=prices.reduce((a, b) => a + b, 0)
 		if (!orders) {
 			return res.status(404).json({
 				message: "user orders not found",
 			})
 		}
-		res.json(orders)
+		res.json({
+            id: orders.id,
+            products: i,
+            orderTotal: tot
+        })
 	} catch (err) {
 		next(err)
 	}
