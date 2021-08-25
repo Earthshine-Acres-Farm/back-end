@@ -22,15 +22,11 @@ router.post("/users/:id/orders", async (req, res, next) => {
 	// guests need a temporary id
 	try{
 		const itemData = req.body;
-    	// const { id } = req.params;
 		const user= await Checkout.getUserById(req.params.id)
 		const order= await Checkout.addToOrders(itemData)
-		// const items= await Checkout.addToOrderItems(itemData)
-		// console.log(user)
 		if (user){
 			console.log(order)
 			res.status(201).json(order)
-			// res.json(items)
 		}else {
 			res.status(404).json({ message: 'Could not find user with given id.' })
 	  }}

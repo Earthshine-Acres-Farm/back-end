@@ -1,4 +1,5 @@
 const db= require('../../data/dbConfig')
+
 function getAnimals() {
     return db("animals").select('*')
 }
@@ -29,8 +30,8 @@ function getProducts() {
 // }
 
 //provides token
-function getUser(email,password){
-    return db("users").where('users.email',email).where('users.password',password)
+function findBy(email){
+    return db("users").select('*').where('email', email).first()
 }
 
 function addUser(user){
@@ -52,7 +53,7 @@ module.exports={
     // getProduceProducts,
     getProducts,
     // getSoapProducts,
-    getUser,
+    findBy,
     addUser,
     forgotUserPassword
 

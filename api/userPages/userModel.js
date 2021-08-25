@@ -1,7 +1,11 @@
-const db= require('../../data/dbConfig')
+const db= require('../../data/dbConfig');
 
 function getUserById (userId) {
-    return db("users").where('users.id',userId).select('*')
+    return db("users").where('users.id',userId).select("id",
+    "firstName",
+    "lastName",
+    "email",
+    "address")
 }
 
 // function addOrder(order) {
@@ -14,20 +18,29 @@ const getUserOrders = async (userId) =>{
         products: [],
         orderTotal: ''
     };
+    let allOrders= []
     await db ("orders as o")
     .select('o.id','o.products','o.orderTotal',)
     .where('o.buyerId',userId)
-    .first()
     .then((ord)=>{
-        orderData = {
-            id: ord.id,
-            products: ord.products,
-            orderTotal: ord.orderTotal
-        }
-        console.log(orderData)
+        ord.forEach(o=>{
+            orderData={
+                id: o.id,
+                products: o.products,
+                orderTotal: o.orderTotal
+            }
+            allOrders.push(orderData)
+        })
+        // orderData = {
+        //     id: ord.id,
+        //     products: ord.products,
+        //     orderTotal: ord.orderTotal
+        // }
+        // allOrders.push(ord)
+        console.log(allOrders)
 }
 )
-return orderData
+return allOrders
 }
 
 function deleteAccount (id) {
