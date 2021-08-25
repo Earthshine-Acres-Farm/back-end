@@ -1,18 +1,52 @@
 const express = require('express');
 const router = express.Router();
 const Main= require('./mainModel')
+const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
 
 //signup
 router.post("/users", async (req, res, next) => {
 	try {
         const {firstName, lastName, email, password, address}=req.body
-		const newUser = await Main.addUser({firstName, lastName, email, password, address})
+		const hpass= bcrypt.hashSync(password, 14)
+		const newUser = await Main.addUser({firstName, lastName, email, password: hpass, address})
         console.log(newUser)
 		res.status(201).json(newUser)
 	} catch (err) {
 		next(err)
 	}
 })
+
+//login
+router.post('/login', async (req, res, next) => {
+    try {
+          const { email, password } = req.body
+          
+		if (!email || !password) {
+				return res.status(401).json({
+					message: "email and password required",
+				})
+			}
+        const user = await Main.findBy(email)
+      	const passwordValid = await bcrypt.compareSync(password, user.password)
+        if (!user.email || !passwordValid) {
+            return res.status(401).json({
+                message: "invalid credentials",
+            })
+      	}
+        const token = jwt.sign({
+            id: user.id,
+        }, process.env.JWT_SECRET)
+        res.cookie("token", token)
+        res.json({
+            message: `Welcome, ${user.email}!`,
+        //   token: token
+        })
+    }catch(err) {
+          next(err)
+    }
+})
+
 //change password
 router.put("/users/:id", async (req, res, next) => {
 	try {
@@ -57,5 +91,7 @@ router.get("/products", async (req, res, next) => {
 		next(err)
 	}
 })
+
+
 
 module.exports = router

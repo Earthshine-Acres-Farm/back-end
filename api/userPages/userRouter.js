@@ -30,23 +30,44 @@ router.get("/:id", async (req, res, next) => {
 router.get("/:id/orders", async (req, res, next) => {
 	try {
 		const orders = await Users.getUserOrders(req.params.id)
-        let prices=[]
-        let i=JSON.parse(orders.products)
-        i.map((p)=>{
-            prices.push(p.price*p.quantity)
+        
+		let allOrders= []
+		orders.forEach(ord=>{
+			let i= JSON.parse(ord.products)
+			let prices= []
+			i.map((p)=>{
+				prices.push(p.price*p.quantity)	//problem
+			})
+			let tot= prices.reduce((a, b) => a + b, 0)
+			allOrders.push({
+				    id: ord.id,
+				    products: i,
+				    orderTotal: tot
+				})	
+		})
+        // let i= JSON.parse(orders.products)
+        // i.map((p)=>{
+        //     prices.push(p.price*p.quantity)
             
-        })
-        let tot=prices.reduce((a, b) => a + b, 0)
+        // })
+        // let tot= prices.reduce((a, b) => a + b, 0)
+		// let all= []
 		if (!orders) {
 			return res.status(404).json({
 				message: "user orders not found",
 			})
 		}
-		res.json({
-            id: orders.id,
-            products: i,
-            orderTotal: tot
-        })
+		// all.push({
+        //     id: orders.id,
+        //     products: i,
+        //     orderTotal: tot
+        // })
+		// res.json({
+		// 	id: orders.id,
+		// 	products: i,
+		// 	orderTotal: tot
+		// })
+		res.json(allOrders)
 	} catch (err) {
 		next(err)
 	}

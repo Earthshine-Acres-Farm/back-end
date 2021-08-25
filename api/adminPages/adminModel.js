@@ -97,10 +97,6 @@ async function updateOrder(id, changes) {
     return getOrderById(id);
 };
 
-// function removeOrder(id) {
-//     return db("orders").where({ id }).del();
-// };
-
 function getProduce() {
     return db("produce").select('*')
 };
@@ -177,10 +173,6 @@ function removeSoap(id) {
 function getOrderStatus(status){
     return db("orders").select('orders.id','orders.createdAt').where('orders.shipped',status)
 }
-
-// function getShippedOrders(){
-//     return db("orders").where('orders.shipped',true)
-// }
 
 const getCustomerOrder =async (id)=>{
     let customerData = {
